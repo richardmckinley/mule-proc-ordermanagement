@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule 
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" 
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:retail-process-api="http://www.mulesoft.org/schema/mule/retail-process-api" 
+	xmlns:customer-process-api="http://www.mulesoft.org/schema/mule/customer-process-api" 
+	xmlns:product-stock-system-api="http://www.mulesoft.org/schema/mule/product-stock-system-api" 
+	xmlns:sns="http://www.mulesoft.org/schema/mule/sns"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" 
+	xmlns:adl-system-api="http://www.mulesoft.org/schema/mule/adl-system-api" 
+	xmlns:device-management-process-api="http://www.mulesoft.org/schema/mule/device-management-process-api" 
+	xmlns:notification-process-api="http://www.mulesoft.org/schema/mule/notification-process-api" 
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" 
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/notification-process-api http://www.mulesoft.org/schema/mule/notification-process-api/current/mule-notification-process-api.xsd 
+http://www.mulesoft.org/schema/mule/device-management-process-api http://www.mulesoft.org/schema/mule/device-management-process-api/current/mule-device-management-process-api.xsd
+http://www.mulesoft.org/schema/mule/adl-system-api http://www.mulesoft.org/schema/mule/adl-system-api/current/mule-adl-system-api.xsd
+http://www.mulesoft.org/schema/mule/sns http://www.mulesoft.org/schema/mule/sns/current/mule-sns.xsd
+http://www.mulesoft.org/schema/mule/product-stock-system-api http://www.mulesoft.org/schema/mule/product-stock-system-api/current/mule-product-stock-system-api.xsd
+http://www.mulesoft.org/schema/mule/customer-process-api http://www.mulesoft.org/schema/mule/customer-process-api/current/mule-customer-process-api.xsd
+http://www.mulesoft.org/schema/mule/retail-process-api http://www.mulesoft.org/schema/mule/retail-process-api/current/mule-retail-process-api.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	
+	<configuration-properties doc:name="Configuration properties" doc:id="89efc25f-9438-4a62-8e79-2a1b0506b6e1" file="config-${mule.env}.yaml" />
+	
+	<api-gateway:autodiscovery apiId="${api.id}" doc:name="API Autodiscovery" doc:id="a9459400-7e54-4c71-a18a-64db922b9e48" flowRef="ordermanagement-process-api-main" ignoreBasePath="true"/>
+		
+	<configuration doc:name="Configuration" doc:id="f52cad15-2a5f-4f73-a165-2a186f9e9a0a" defaultErrorHandler-ref="global-error-handler" />
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="368ca7f1-dd87-41d0-b785-a7ea0ce93b00" name="ordermanagement-process-api-config" raml="api/customer.raml" api="api/ordermanagement-process-api.raml"/>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="65a733d3-8abb-434f-97c4-75bc87fb9191">
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="7c77f5b4-02fe-4bb4-9bc4-02f026b3a63e" file="config-secure.yaml" key="${mule.vault.key}" />
+	<http:request-config name="mule-sys-salesforce" doc:name="HTTP Request configuration" doc:id="de2d62fb-3957-49a3-980c-7b0cd7dae477" basePath="${sys-salesforce.base_path}">
+		<http:request-connection host="${sys-salesforce.host}" port="${sys-salesforce.port}" />
+	</http:request-config>
+	
+</mule>

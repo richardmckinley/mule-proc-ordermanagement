@@ -1,0 +1,20 @@
+api:
+  name: "mule-template"
+  id: "16181875"
+  version: "v1"
+  
+http:
+  path: "/api/${api.version}/*"
+  timeout: "5000" 
+  port: "8080"
+  private:
+    port: "8091"
+     
+sys-salesforce:
+  name: "mule-sys-salesforce"
+  version: "v1"
+  base_path: "/api/${pkyc.version}"
+  protocol: "HTTP"
+  host: "mule-sys-salesforce-v1-sandbox.de-c1.cloudhub.io"
+  port: "80"
+  clientid: "b7bc1b90d2504bb58866d86e88c6a42e"
