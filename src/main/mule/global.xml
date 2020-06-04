@@ -34,11 +34,11 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 	<configuration doc:name="Configuration" doc:id="f52cad15-2a5f-4f73-a165-2a186f9e9a0a" defaultErrorHandler-ref="global-error-handler" />
 	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="368ca7f1-dd87-41d0-b785-a7ea0ce93b00" name="ordermanagement-process-api-config" raml="api/customer.raml" api="resource::e8df9af0-19ba-4ede-8725-b905ab404dfe:ordermanagement-process-api:1.0.1:raml:zip:ordermanagement-process-api.raml"/>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="65a733d3-8abb-434f-97c4-75bc87fb9191">
-		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+		<http:listener-connection host="0.0.0.0" port="${http.port}"/>
 	</http:listener-config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="7c77f5b4-02fe-4bb4-9bc4-02f026b3a63e" file="config-secure.yaml" key="${mule.vault.key}" />
 	<http:request-config name="mule-sys-salesforce" doc:name="HTTP Request configuration" doc:id="de2d62fb-3957-49a3-980c-7b0cd7dae477" basePath="${sys-salesforce.base_path}">
-		<http:request-connection host="${sys-salesforce.host}" port="${sys-salesforce.port}" />
+		<http:request-connection host="${sys-salesforce.host}" port="${sys-salesforce.port}" connectionIdleTimeout="300000"/>
 	</http:request-config>
 	
 </mule>

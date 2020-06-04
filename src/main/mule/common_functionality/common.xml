@@ -16,22 +16,20 @@
 		http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
 
 	<sub-flow name="common-initiation-subflow">
-		<ee:transform doc:name="Initialize Variables" doc:id="ba7c6f7f-66b2-4a34-95f1-73fb64d18f39">
-			<ee:variables>
-				<ee:set-variable variableName="logLevel" ><![CDATA[%dw 2.0
+		<set-variable value="#[%dw 2.0
 output application/java
 ---
-'INFO']]></ee:set-variable>
-				<ee:set-variable variableName="processingStage" ><![CDATA[%dw 2.0
+'Init']" doc:name="Set transactionStatus to INIT" doc:id="4b6c4150-0e05-4b8e-a19f-1e077aa06b96" variableName="transactionStatus"/>
+		<set-variable value="#[%dw 2.0
 output application/java
 ---
-'BEGIN']]></ee:set-variable>
-				<ee:set-variable variableName="transactionStatus" ><![CDATA[%dw 2.0
+'BEGIN']" doc:name="Set processingStage to BEGIN" doc:id="ac48d193-aaca-4253-9c57-81cbc37cee52" variableName="processingStage"/>
+		<set-variable value="#[%dw 2.0
 output application/java
 ---
-'Init']]></ee:set-variable>
-				<ee:set-variable variableName="inboundAttributes" ><![CDATA[%dw 2.0
-output application/json skipNullOn="everywhere"
+'INFO']" doc:name="Set logLevel to INFO" doc:id="8a114b0a-370b-4941-8e04-dc51ce963e21" variableName="logLevel"/>
+		<set-variable value="#[%dw 2.0
+output application/json skipNullOn=&quot;everywhere&quot;
 ---
 {
 	'client_id': attributes.headers['client_id'],
@@ -49,29 +47,9 @@ output application/json skipNullOn="everywhere"
 	'X-Location-id': attributes.headers['X-Location-id'],
 	'X-Campaign-id': attributes.headers['X-Campaign-id'],
 	(vars.additionalAttributes)
-}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="Generate default headers" doc:id="54fe4bb5-5132-47b9-8cb0-61157f4a22f3">
-			<ee:message />
-			<ee:variables>
-				<ee:set-variable variableName="requestHeaders" ><![CDATA[%dw 2.0
-output application/json skipNullOn="everywhere"
----
-{
-	"X-Channel" : vars.inboundAttributes['X-Channel'],
-	"X-Correlation-id" : vars.inboundAttributes['X-Correlation-id'],
-	"X-Session" : vars.inboundAttributes['X-Session'],
-	"X-User" : vars.inboundAttributes['X-User'],
-	"X-Consumer" : vars.inboundAttributes['X-Consumer'],
-	"X-Location" : vars.inboundAttributes['X-Location'],
-	"X-Location-id" : vars.inboundAttributes['X-Location-id'],
-	"X-Campaign-id" : vars.inboundAttributes['X-Campaign-id']
-}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+}]" doc:name="Set inboundAttributes" doc:id="da66ca91-0e3b-4124-99bb-778621893e2c" variableName="inboundAttributes"/>
 		<flow-ref doc:name="common-logger-sub-flow" doc:id="550890bb-ff88-48ae-a505-0b7382f11f13" name="common-logger-subflow"/>
-		<ee:transform doc:name="Init Required Variables" doc:id="ee495dfe-0379-4375-a388-96d3d5e4ca53" >
+		<ee:transform doc:name="Set transaction and processing to INPROGRESS" doc:id="ee495dfe-0379-4375-a388-96d3d5e4ca53" >
 			<ee:variables >
 				<ee:set-variable variableName="transactionStatus" ><![CDATA[%dw 2.0
 output application/java
@@ -80,33 +58,29 @@ output application/java
 				<ee:set-variable variableName="processingStage" ><![CDATA[%dw 2.0
 output application/java
 ---
-'InProgress']]></ee:set-variable>
+'INPROGRESS']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
 
 	<sub-flow name="common-finalize-subflow">
-		<ee:transform doc:name="Init Required Variables" doc:id="5d6c16c6-d3d9-4919-815f-7f895fa50a4f" >
-			<ee:variables >
-				<ee:set-variable variableName="transactionStatus" ><![CDATA[%dw 2.0
+		<set-variable value="#[%dw 2.0
 output application/java
 ---
 if(vars.error != null) 
 	'FAILURE' 
 else 
-	'SUCCESS']]></ee:set-variable>
-				<ee:set-variable variableName="processingStage" ><![CDATA[%dw 2.0
+	'SUCCESS']" doc:name="Set transactionStatus to FAILURE or SUCCESS" doc:id="d54ff895-d5e6-470b-82b8-311c686e422a" variableName="transactionStatus" />
+		<set-variable value="#[%dw 2.0
 output application/java
 ---
-'COMPLETED']]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+'BEGIN']" doc:name="Set processingStage to COMPLETED" doc:id="10d7a6f2-d5ab-4dbc-a997-787b760a7738" variableName="processingStage" />
 		<flow-ref doc:name="common-generate-response-subflow" doc:id="1ddcf1c7-7625-4a84-9e26-f159b1920510" name="common-generate-response-subflow"/>
 		<flow-ref doc:name="common-logger-sub-flow" doc:id="40149a5a-a3ed-4ce9-bbf6-eda578c69164" name="common-logger-subflow"/>
 	</sub-flow>
 
 	<sub-flow name="common-logger-subflow">
-		<ee:transform doc:name="Compose The Logging Message" doc:id="d0491ec6-aeba-4b53-9ae3-67b2d2a4f4a1">
+		<ee:transform doc:name="Set commonLogMsg" doc:id="d0491ec6-aeba-4b53-9ae3-67b2d2a4f4a1">
 			<ee:variables>
 				<ee:set-variable variableName="commonLogMsg"><![CDATA[%dw 2.0
 output application/json skipNullOn="everywhere"
@@ -141,19 +115,32 @@ output application/json skipNullOn="everywhere"
 	</sub-flow>
 	
 	<sub-flow name="common-generate-response-subflow" doc:id="e85c1e26-b60b-47c7-bb7e-a4cff80b45dc" >
-		<ee:transform doc:name="Generate Response" doc:id="5f4e5f01-91d4-421a-8dfd-858a5fff25b1" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform doc:name="Unwrap response payload" doc:id="5f4e5f01-91d4-421a-8dfd-858a5fff25b1">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json skipNullOn="everywhere"
 ---
 {
 	'code': (if (isEmpty(vars.httpStatus)) 200 else vars.httpStatus as Number),
 	'info': vars.transactionStatus,
-	(if (vars.error == null) {'response-data': payload} else {'errors': vars.errors})
+	(
+		if (vars.error == null) 
+		(
+			if (isEmpty(payload.'response-data'.'response-data'.'response-data')) 
+			(
+				if (isEmpty(payload.'response-data'.'response-data'))
+				(
+					'response-data': payload.'response-data'
+				)
+				else{ 'response-data': payload.'response-data'.'response-data' }
+			)
+			else {'response-data': payload.'response-data'.'response-data'.'response-data'}
+		) else {'errors': vars.errors}
+	)
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<ee:transform doc:name="Generate Log Message" doc:id="48acc386-e049-4304-bb6d-c0ac4591f82a" >
+		<ee:transform doc:name="Set logMessage" doc:id="48acc386-e049-4304-bb6d-c0ac4591f82a" >
 			<ee:variables >
 				<ee:set-variable variableName="logMessage" ><![CDATA[%dw 2.0
 output application/json skipNullOn="everywhere"
@@ -168,8 +155,8 @@ output application/json skipNullOn="everywhere"
 	</sub-flow>
 	
 	<sub-flow name="common-error-response-subflow" doc:id="d99d9cef-e473-42f3-8c1d-b977517eca73">
-		<set-variable value="#['ERROR']" doc:name="logLevel" doc:id="be26f705-5e0a-406c-9d48-0b3f362bab88" variableName="logLevel" mimeType="application/java" />
-		<set-variable value="#[error]" doc:name="error" doc:id="583965fe-5918-4ddd-bed4-52d5773a5ad9" variableName="error" />
+		<set-variable value="#['ERROR']" doc:name="Set logLevel to ERROR" doc:id="be26f705-5e0a-406c-9d48-0b3f362bab88" variableName="logLevel" mimeType="application/java" />
+		<set-variable value="#[error]" doc:name="Set error" doc:id="583965fe-5918-4ddd-bed4-52d5773a5ad9" variableName="error" />
 		<ee:transform doc:name="checkIfErrorIsPropagated" doc:id="3fafdfd4-b5b2-4cf9-aeb4-c1bd99afdc59">
 			<ee:variables>
 				<ee:set-variable variableName="errors"><![CDATA[%dw 2.0
@@ -188,7 +175,7 @@ if (vars.errors == null and vars.error.errorMessage.payload != null and vars.err
 ) else vars.errors]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Compose Error Payload" doc:id="a1409e89-62b0-4548-8ae1-2e943907821b">
+		<ee:transform doc:name="Set errors" doc:id="a1409e89-62b0-4548-8ae1-2e943907821b">
 			<ee:variables >
 				<ee:set-variable variableName="errors" ><![CDATA[%dw 2.0
 output application/json skipNullOn="everywhere"
