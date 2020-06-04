@@ -19,10 +19,7 @@ http://www.mulesoft.org/schema/mule/salesforce-system-api http://www.mulesoft.or
 output application/json
 ---
 {
-  "address__c": payload.address,
-  "lastName__c": payload.firstName,
-  "orderId__c": payload.orderId,
-  "firstName__c": payload.lastName
+  "poNumber": payload.poNumber
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
@@ -31,7 +28,9 @@ output application/json
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
-	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id'
+	"client_secret" : Mule::p('secure::sys-salesforce.client_secret'),
+	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id',
+	"client_id" : Mule::p('sys-salesforce.client_id')
 }]]]></http:headers>
 		</http:request>
 		<logger level="INFO" doc:name="Logger" doc:id="d4399182-402b-47ed-be69-6609a7c82347" message="#[payload]"/>
