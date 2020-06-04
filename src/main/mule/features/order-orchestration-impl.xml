@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
-	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:notification-system-api="http://www.mulesoft.org/schema/mule/notification-system-api"
-	xmlns:sns="http://www.mulesoft.org/schema/mule/sns" xmlns:adl-system-api="http://www.mulesoft.org/schema/mule/adl-system-api" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:salesforce-system-api="http://www.mulesoft.org/schema/mule/salesforce-system-api"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:notification-system-api="http://www.mulesoft.org/schema/mule/notification-system-api" xmlns:sns="http://www.mulesoft.org/schema/mule/sns" xmlns:adl-system-api="http://www.mulesoft.org/schema/mule/adl-system-api" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/adl-system-api http://www.mulesoft.org/schema/mule/adl-system-api/current/mule-adl-system-api.xsd
 http://www.mulesoft.org/schema/mule/sns http://www.mulesoft.org/schema/mule/sns/current/mule-sns.xsd
 http://www.mulesoft.org/schema/mule/notification-system-api http://www.mulesoft.org/schema/mule/notification-system-api/current/mule-notification-system-api.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
-http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/salesforce-system-api http://www.mulesoft.org/schema/mule/salesforce-system-api/current/mule-salesforce-system-api.xsd">
 	<sub-flow name="order-orchestration-sublow" doc:id="d274168c-9aaa-4e5e-8ae7-30ecc6d43cb0">
 		<ee:transform doc:name="Transform Message" doc:id="b13c135e-20af-4f75-b7c8-f2e2bc64f633" >
 			<ee:message >
@@ -33,7 +34,6 @@ output application/json
 	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id'
 }]]]></http:headers>
 		</http:request>
-		
 		<logger level="INFO" doc:name="Logger" doc:id="d4399182-402b-47ed-be69-6609a7c82347" message="#[payload]"/>
 	</sub-flow>
 	
