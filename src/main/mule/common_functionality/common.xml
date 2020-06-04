@@ -74,7 +74,7 @@ else
 		<set-variable value="#[%dw 2.0
 output application/java
 ---
-'BEGIN']" doc:name="Set processingStage to COMPLETED" doc:id="10d7a6f2-d5ab-4dbc-a997-787b760a7738" variableName="processingStage" />
+'COMPLETED']" doc:name="Set processingStage to COMPLETED" doc:id="10d7a6f2-d5ab-4dbc-a997-787b760a7738" variableName="processingStage" />
 		<flow-ref doc:name="common-generate-response-subflow" doc:id="1ddcf1c7-7625-4a84-9e26-f159b1920510" name="common-generate-response-subflow"/>
 		<flow-ref doc:name="common-logger-sub-flow" doc:id="40149a5a-a3ed-4ce9-bbf6-eda578c69164" name="common-logger-subflow"/>
 	</sub-flow>
@@ -89,7 +89,7 @@ output application/json skipNullOn="everywhere"
 	dateTimeStamp: now() as String {format: "yyyy-MM-dd'T'HH:mm:ss" },
 	application: Mule::p('api.name'),
 	(vars.inboundAttributes),
-	message: vars.logMessage,
+	message: payload,
 	processingStage: vars.processingStage,
 	transactionStatus: vars.transactionStatus	
 }]]></ee:set-variable>
@@ -130,7 +130,11 @@ output application/json skipNullOn="everywhere"
 			(
 				if (isEmpty(payload.'response-data'.'response-data'))
 				(
-					'response-data': payload.'response-data'
+					if (isEmpty(payload.'response-data'))
+					(
+						'response-data': payload
+					)
+					else{ 'response-data': payload.'response-data' }
 				)
 				else{ 'response-data': payload.'response-data'.'response-data' }
 			)
@@ -140,16 +144,12 @@ output application/json skipNullOn="everywhere"
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<ee:transform doc:name="Set logMessage" doc:id="48acc386-e049-4304-bb6d-c0ac4591f82a" >
-			<ee:variables >
-				<ee:set-variable variableName="logMessage" ><![CDATA[%dw 2.0
-output application/json skipNullOn="everywhere"
+		<ee:transform doc:name="Set logMessage" doc:id="48acc386-e049-4304-bb6d-c0ac4591f82a">
+			<ee:variables>
+				<ee:set-variable variableName="logMessage"><![CDATA[%dw 2.0
+output application/json
 ---
-{
-	'code': payload.code,
-	'info': payload.info,
-	(if (isEmpty(payload.errors)) {'response-data': vars.logMessage} else {'errors': payload.errors})
-}]]></ee:set-variable>
+payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
