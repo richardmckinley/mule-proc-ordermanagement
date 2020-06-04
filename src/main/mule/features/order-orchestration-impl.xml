@@ -13,18 +13,15 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/salesforce-system-api http://www.mulesoft.org/schema/mule/salesforce-system-api/current/mule-salesforce-system-api.xsd">
 	<sub-flow name="order-orchestration-sublow" doc:id="d274168c-9aaa-4e5e-8ae7-30ecc6d43cb0">
-		<ee:transform doc:name="Transform Message" doc:id="b13c135e-20af-4f75-b7c8-f2e2bc64f633" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-  "poNumber": payload.poNumber
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	
-<http:request method="POST" doc:name="Request to mule-sys-salesforce" doc:id="cdfe229a-d957-4389-a0c8-ba4cad4ead77" config-ref="mule-sys-salesforce" path="/order" responseTimeout="30000">
+		<set-variable value="#[payload]" doc:name="Set orderPayload" doc:id="89036f0c-9ad1-4819-8101-095c8f59aacc" variableName="orderPayload"/>
+		<flow-ref doc:name="salesforce-create-order-subflow" doc:id="17f4e9e0-18fe-4df4-85ba-97661fd9a1d8" name="sys-salesforce-order-create"/>
+		<set-variable value="#[payload.'response-data'.items.id[0]]" doc:name="Set orderId" doc:id="8c4111ff-a477-4d29-900c-7795f63c892d" variableName="orderId" />
+		<set-payload value="#[vars.orderPayload.items]" doc:name="Extract Items" doc:id="acdc5624-d666-4f7d-8047-20a262165ff0" />
+		<flow-ref doc:name="salesforce-create-items-subflow" doc:id="8f75ffc4-2421-40c9-92c2-bd810da05c51" name="sys-salesforce-items-create"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d4399182-402b-47ed-be69-6609a7c82347" message="#[payload]"/>
+	</sub-flow>
+	<sub-flow name="sys-salesforce-customer-create" doc:id="21c1502e-54b9-4d2e-89ce-f5faffda3193" >
+		<http:request method="POST" doc:name="Request to mule-sys-salesforce create customer" doc:id="5483ee0a-0e2b-4f66-a395-534a7e7c6704" config-ref="mule-sys-salesforce" path="/customer" responseTimeout="30000" >
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -33,7 +30,43 @@ output application/json
 	"client_id" : Mule::p('sys-salesforce.client_id')
 }]]]></http:headers>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="d4399182-402b-47ed-be69-6609a7c82347" message="#[payload]"/>
+	</sub-flow>
+	<sub-flow name="sys-salesforce-order-create" doc:id="de479415-b424-4706-b239-e7c66d0f5a72" >
+		<http:request method="POST" doc:name="Request to mule-sys-salesforce create order" doc:id="cdfe229a-d957-4389-a0c8-ba4cad4ead77" config-ref="mule-sys-salesforce" path="/order" responseTimeout="30000">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : Mule::p('secure::sys-salesforce.client_secret'),
+	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id',
+	"client_id" : Mule::p('sys-salesforce.client_id')
+}]]]></http:headers>
+		</http:request>
+	</sub-flow>
+	<sub-flow name="sys-salesforce-items-create" doc:id="7910b030-5469-4b2c-ac60-49c3834e8d6f" >
+		<ee:transform doc:name="Map orderId to Item" doc:id="117925b4-0e69-464c-8e64-b75e8ee41088" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map {
+	id: $.id,
+	category: $.category,
+	size: $.size,
+	orderId: vars.orderId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="50974d83-06a3-4158-b1db-35bce99d4a5a" >
+			<http:request method="POST" doc:name="Request to mule-sys-salesforce create item" doc:id="144eeb52-6349-4522-b96c-04959a3d5399" config-ref="mule-sys-salesforce" path="/item" responseTimeout="30000">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_secret" : Mule::p('secure::sys-salesforce.client_secret'),
+	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id',
+	"client_id" : Mule::p('sys-salesforce.client_id')
+}]]]></http:headers>
+		</http:request>
+		</foreach>
 	</sub-flow>
 	
 </mule>

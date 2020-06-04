@@ -32,7 +32,7 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 	<api-gateway:autodiscovery apiId="${api.id}" doc:name="API Autodiscovery" doc:id="a9459400-7e54-4c71-a18a-64db922b9e48" flowRef="ordermanagement-process-api-main" ignoreBasePath="true"/>
 		
 	<configuration doc:name="Configuration" doc:id="f52cad15-2a5f-4f73-a165-2a186f9e9a0a" defaultErrorHandler-ref="global-error-handler" />
-	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="368ca7f1-dd87-41d0-b785-a7ea0ce93b00" name="ordermanagement-process-api-config" raml="api/customer.raml" api="resource::e8df9af0-19ba-4ede-8725-b905ab404dfe:ordermanagement-process-api:1.0.1:raml:zip:ordermanagement-process-api.raml"/>
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="368ca7f1-dd87-41d0-b785-a7ea0ce93b00" name="ordermanagement-process-api-config" raml="api/customer.raml" api="resource::e8df9af0-19ba-4ede-8725-b905ab404dfe:ordermanagement-process-api:1.0.3:raml:zip:ordermanagement-process-api.raml"/>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="65a733d3-8abb-434f-97c4-75bc87fb9191">
 		<http:listener-connection host="0.0.0.0" port="${http.port}"/>
 	</http:listener-config>

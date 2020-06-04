@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
     <flow name="ordermanagement-process-api-main">
         <http:listener config-ref="HTTP_Listener_config" path="${http.path}">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -10,10 +10,10 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <flow-ref doc:name="common-initiation-subflow" doc:id="ce7e8d18-fd3b-42c4-8470-823ae2a09f3f" name="common-initiation-subflow"/>
-		<apikit:router config-ref="ordermanagement-process-api-config"/>
-        <flow-ref doc:name="common-finalize-subflow" doc:id="9931b5e6-96e1-4158-b4ba-c87a17a67cb8" name="common-finalize-subflow"/>
-		<error-handler>
+        <flow-ref doc:name="common-initiation-subflow" doc:id="ce7e8d18-fd3b-42c4-8470-823ae2a09f3f" name="common-initiation-subflow" />
+        <apikit:router config-ref="ordermanagement-process-api-config" />
+        <flow-ref doc:name="common-finalize-subflow" doc:id="9931b5e6-96e1-4158-b4ba-c87a17a67cb8" name="common-finalize-subflow" />
+        <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
@@ -104,7 +104,7 @@ output application/json
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:console config-ref="ordermanagement-process-api-config"/>
+        <apikit:console config-ref="ordermanagement-process-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -122,6 +122,6 @@ output application/json
         </error-handler>
     </flow>
     <flow name="post:\order:application\json:ordermanagement-process-api-config">
-        <flow-ref doc:name="order-orchestration-subflow" doc:id="5056b38a-1487-441d-8877-9ce2aa799d5a" name="order-orchestration-sublow"/>
+        <flow-ref doc:name="order-orchestration-subflow" doc:id="5056b38a-1487-441d-8877-9ce2aa799d5a" name="order-orchestration-sublow" />
     </flow>
 </mule>
