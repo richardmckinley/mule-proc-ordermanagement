@@ -2,10 +2,6 @@ api:
   name: "mule-proc-ordermanagement"
   id: "16187789"
   version: "v1"
-  
-logger:
-  application_name: "${api.name}"
-  application_version: "${api.version}"
 
 http:
   path: "/api/${api.version}/*"

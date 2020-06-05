@@ -31,6 +31,7 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
 	"client_id" : Mule::p('sys-salesforce.client_id')
 }]]]></http:headers>
 		</http:request>
+		<json-logger:logger doc:name="Logger" doc:id="8ca6cf42-b124-486f-9ad5-b7317dc3705a" config-ref="JSON_Logger_Config" message="Create Customer" tracePoint="AFTER_REQUEST"/>
 	</sub-flow>
 	<sub-flow name="sys-salesforce-order-create" doc:id="de479415-b424-4706-b239-e7c66d0f5a72" >
 		<http:request method="POST" doc:name="Request to mule-sys-salesforce create order" doc:id="cdfe229a-d957-4389-a0c8-ba4cad4ead77" config-ref="mule-sys-salesforce" path="/order" responseTimeout="30000">
@@ -42,7 +43,7 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
 	"client_id" : Mule::p('sys-salesforce.client_id')
 }]]]></http:headers>
 		</http:request>
-		<json-logger:logger doc:name="Logger" doc:id="7907baad-1607-401e-8d10-a75c2aaae5e5" config-ref="JSON_Logger_Config" message="Test Log" />
+		<json-logger:logger doc:name="Logger" doc:id="7907baad-1607-401e-8d10-a75c2aaae5e5" config-ref="JSON_Logger_Config" message="Create Order" tracePoint="AFTER_REQUEST"/>
 	</sub-flow>
 	<sub-flow name="sys-salesforce-items-create" doc:id="7910b030-5469-4b2c-ac60-49c3834e8d6f" >
 		<ee:transform doc:name="Map orderId to Item" doc:id="117925b4-0e69-464c-8e64-b75e8ee41088" >
@@ -68,6 +69,7 @@ payload map {
 	"client_id" : Mule::p('sys-salesforce.client_id')
 }]]]></http:headers>
 		</http:request>
+			<json-logger:logger doc:name="Logger" doc:id="9da8bc39-77b5-4b1c-b139-6f9788823371" config-ref="JSON_Logger_Config" message="Create Item" tracePoint="AFTER_REQUEST"/>
 		</foreach>
 	</sub-flow>
 	
