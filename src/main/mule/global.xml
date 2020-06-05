@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule 
-	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" 
-	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" 
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" 
 	xmlns:retail-process-api="http://www.mulesoft.org/schema/mule/retail-process-api" 
 	xmlns:customer-process-api="http://www.mulesoft.org/schema/mule/customer-process-api" 
-	xmlns:product-stock-system-api="http://www.mulesoft.org/schema/mule/product-stock-system-api" 
-	xmlns:sns="http://www.mulesoft.org/schema/mule/sns"
+	xmlns:product-stock-system-api="http://www.mulesoft.org/schema/mule/product-stock-system-api"
+	xmlns:sns="http://www.mulesoft.org/schema/mule/sns" 
 	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" 
 	xmlns:adl-system-api="http://www.mulesoft.org/schema/mule/adl-system-api" 
 	xmlns:device-management-process-api="http://www.mulesoft.org/schema/mule/device-management-process-api" 
 	xmlns:notification-process-api="http://www.mulesoft.org/schema/mule/notification-process-api" 
-	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" 
-	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
@@ -25,7 +25,8 @@ http://www.mulesoft.org/schema/mule/product-stock-system-api http://www.mulesoft
 http://www.mulesoft.org/schema/mule/customer-process-api http://www.mulesoft.org/schema/mule/customer-process-api/current/mule-customer-process-api.xsd
 http://www.mulesoft.org/schema/mule/retail-process-api http://www.mulesoft.org/schema/mule/retail-process-api/current/mule-retail-process-api.xsd
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
-http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
 	
 	<configuration-properties doc:name="Configuration properties" doc:id="89efc25f-9438-4a62-8e79-2a1b0506b6e1" file="config-${mule.env}.yaml" />
 	
@@ -40,5 +41,6 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 	<http:request-config name="mule-sys-salesforce" doc:name="HTTP Request configuration" doc:id="de2d62fb-3957-49a3-980c-7b0cd7dae477" basePath="${sys-salesforce.base_path}">
 		<http:request-connection host="${sys-salesforce.host}" port="${sys-salesforce.port}" connectionIdleTimeout="300000"/>
 	</http:request-config>
+	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="2b631910-1225-41ff-b086-c0a69085d4ab" environment="${mule.env}" applicationName="${logger.application_name}" applicationVersion="${logger.application_version}"/>
 	
 </mule>
