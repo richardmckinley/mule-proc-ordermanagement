@@ -1,6 +1,6 @@
 api:
   name: "mule-proc-ordermanagement"
-  id: "16181875"
+  id: "16187789"
   version: "v1"
   
 http:
@@ -13,8 +13,7 @@ http:
 sys-salesforce:
   name: "mule-sys-salesforce"
   version: "v1"
-  base_path: "/api/${pkyc.version}"
+  base_path: "/api/${sys-salesforce.version}"
   protocol: "HTTP"
   host: "mule-sys-salesforce-v1-sandbox.de-c1.cloudhub.io"
   port: "80"
-  clientid: "b7bc1b90d2504bb58866d86e88c6a42e"
