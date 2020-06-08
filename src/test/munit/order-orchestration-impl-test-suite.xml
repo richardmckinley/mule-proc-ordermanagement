@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="order-orchestration-impl-test-suite.xml" />
+	<munit:test name="order-orchestration-impl-happyPath" doc:id="583d63db-4007-4729-a532-513dce19e6d3" description="Test">
+		<munit:behavior >
+			<ee:transform doc:name="Data Provider" doc:id="fef4e5eb-ec7e-4949-89c3-1e601d565d06">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json 
+import sample_data::TestData
+--- 
+TestData::orderOrchPayload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<ee:transform doc:name="Expected Target" doc:id="fb332166-3e19-416e-8eb9-b2d312243857">
+				<ee:message>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="expTarget" ><![CDATA[%dw 2.0
+output application/json 
+import sample_data::TestData
+--- 
+TestData::expTarget]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<munit-tools:mock-when doc:name="Mock when Salesforce Order Create" doc:id="4c6ac710-5aba-496b-8efc-b3754b7c552d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cdfe229a-d957-4389-a0c8-ba4cad4ead77" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0
+output application/json 
+import sample_data::TestData
+--- 
+TestData::orderMock]" mediaType="application/json" encoding="UTF-8"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Salesforce Item Create" doc:id="1b7e2888-3836-4054-b530-8c7277e123f7" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="144eeb52-6349-4522-b96c-04959a3d5399" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0
+output application/json 
+import sample_data::TestData
+--- 
+TestData::itemMock]" mediaType="application/json" encoding="UTF-8"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to order-orchestration-sublow" doc:id="dede18b0-b2ea-4e49-88be-4cdd00db4199" name="order-orchestration-sublow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that orderId is extracted" doc:id="8a571c41-ea65-4be3-baf0-120c921207ea" is='#["a005I0000010dYuQAI"]' expression="#[vars.orderId]"/>
+			<munit-tools:assert-equals doc:name="Assert payload equals expectedPayload" doc:id="312c1eab-8145-4fbd-80fd-6170986417c7" actual="#[payload]" expected="#[%dw 2.0
+output application/json 
+import sample_data::TestData
+--- 
+TestData::expTarget]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

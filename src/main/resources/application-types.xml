@@ -7,4 +7,5 @@ type: string]]></types:shape>
     </types:type>
   </types:catalog>
   <types:enrichment select="#c2fb04e2-f821-4fea-8325-5355d111f981"/>
+  <types:enrichment select="#fb332166-3e19-416e-8eb9-b2d312243857"/>
 </types:mule>

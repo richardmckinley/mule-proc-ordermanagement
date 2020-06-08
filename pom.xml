@@ -70,11 +70,13 @@
                         <requiredApplicationCoverage>80</requiredApplicationCoverage>
                         <formats>
                             <format>html</format>
+                            <format>console</format>
+                            <format>json</format> 
                         </formats>
-                        <ignoreFiles>							
-                        	<ignoreFile>error-handling.xml</ignoreFile>
+                        <ignoreFiles>	
+                        	<ignoreFile>ordermanagement-process-api.xml</ignoreFile>					
+                        	<ignoreFile>common_functionality/error-handling.xml</ignoreFile>
 							<ignoreFile>common_functionality/common.xml</ignoreFile>							
-							<ignoreFile>common_functionality/common-http.xml</ignoreFile>	
 						</ignoreFiles>
                     </coverage>
                 </configuration>
@@ -155,6 +157,19 @@
             <artifactId>mule-jms-connector</artifactId>
             <version>1.6.3</version>
             <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>2.2.5</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>	<dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>2.2.5</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

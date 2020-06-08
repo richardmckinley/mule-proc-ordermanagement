@@ -21,18 +21,6 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
 		<flow-ref doc:name="salesforce-create-items-subflow" doc:id="8f75ffc4-2421-40c9-92c2-bd810da05c51" name="sys-salesforce-items-create"/>
 		<logger level="INFO" doc:name="Logger" doc:id="d4399182-402b-47ed-be69-6609a7c82347" message="#[payload]"/>
 	</sub-flow>
-	<sub-flow name="sys-salesforce-customer-create" doc:id="21c1502e-54b9-4d2e-89ce-f5faffda3193" >
-		<http:request method="POST" doc:name="Request to mule-sys-salesforce create customer" doc:id="5483ee0a-0e2b-4f66-a395-534a7e7c6704" config-ref="mule-sys-salesforce" path="/customer" responseTimeout="30000" >
-			<http:headers ><![CDATA[#[output application/java
----
-{
-	"client_secret" : Mule::p('secure::sys-salesforce.client_secret'),
-	"X-Correlation-Id" : vars.inboundAttributes.'X-Correlation-id',
-	"client_id" : Mule::p('sys-salesforce.client_id')
-}]]]></http:headers>
-		</http:request>
-		<json-logger:logger doc:name="Logger" doc:id="8ca6cf42-b124-486f-9ad5-b7317dc3705a" config-ref="JSON_Logger_Config" message="Create Customer" tracePoint="AFTER_REQUEST"/>
-	</sub-flow>
 	<sub-flow name="sys-salesforce-order-create" doc:id="de479415-b424-4706-b239-e7c66d0f5a72" >
 		<http:request method="POST" doc:name="Request to mule-sys-salesforce create order" doc:id="cdfe229a-d957-4389-a0c8-ba4cad4ead77" config-ref="mule-sys-salesforce" path="/order" responseTimeout="30000">
 			<http:headers><![CDATA[#[output application/java
