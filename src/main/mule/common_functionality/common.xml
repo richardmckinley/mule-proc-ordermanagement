@@ -144,23 +144,6 @@ output application/json skipNullOn="everywhere"
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<ee:transform doc:name="Transform Message" doc:id="cda996d9-919a-41cd-8854-f99c472c9367" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json skipNullOn="everywhere"
----
-{
-	object1: "object1",
-	object2: "object2",
-	(
-		if (vars.id == null) 
-		(
-			test: "c"
-		) else {test: vars.c}
-	)
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<ee:transform doc:name="Set logMessage" doc:id="48acc386-e049-4304-bb6d-c0ac4591f82a">
 			<ee:variables>
 				<ee:set-variable variableName="logMessage"><![CDATA[%dw 2.0
