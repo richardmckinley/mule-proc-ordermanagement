@@ -7,7 +7,18 @@
         to enable other logs like network (-Djavax.net.debug=ssl or all) and 
         Garbage Collector (-XX:+PrintGC). These will be append to the console, so you will 
         see them in the mule_ee.log file. -->
-
+		<Appenders>
+		
+		<Http name="ELK"
+			url="https://d597bb4cc8214ec999beff51c1d97879.eu-central-1.aws.cloud.es.io:9243/mule-omya-logs/_doc">
+			<JsonLayout compact="true" eventEol="true" properties="true" />
+			<Property name="kbn-xsrf" value="true" />
+			<Property name="Content-Type" value="application/json" />
+			<Property name="Authorization" value="Bearer replaceWithToken" />
+			<PatternLayout pattern="%r [%t] %p %c %x - %m%n" />
+		</Http>
+	 </Appenders>
+	 
     <Loggers>
         
         <!-- Http Logger shows wire traffic on DEBUG. -->
